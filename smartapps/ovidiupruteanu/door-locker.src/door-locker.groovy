@@ -7,9 +7,9 @@ definition(
         author: "Ovidiu Pruteanu",
         description: "Locks the door, the smart way",
         category: "Convenience",
-        iconUrl: "https://github.com/ovidiupruteanu/SmartExpanse/raw/master/smartapps/ovidiupruteanu/door-locker/icon/door-locker%401x.png",
-        iconX2Url: "https://github.com/ovidiupruteanu/SmartExpanse/raw/master/smartapps/ovidiupruteanu/door-locker/icon/door-locker%402x.png",
-        iconX3Url: "https://github.com/ovidiupruteanu/SmartExpanse/raw/master/smartapps/ovidiupruteanu/door-locker/icon/door-locker%403x.png")
+        iconUrl: "https://github.com/ovidiupruteanu/SmartExpanse/raw/master/icon/door-locker%401x.png",
+        iconX2Url: "https://github.com/ovidiupruteanu/SmartExpanse/raw/master/icon/door-locker%402x.png",
+        iconX3Url: "https://github.com/ovidiupruteanu/SmartExpanse/raw/master/icon/door-locker%403x.png")
 
 preferences {
     page(name: "pageOne")
