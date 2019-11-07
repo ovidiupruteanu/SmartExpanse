@@ -50,12 +50,14 @@ def initialize() {
 
     subscribe(doorButton, "button.pushed", doorButtonPushed)
     subscribe(doorSensor, "contact.open", doorOpened)
-    subscribe(doorSensor, "contact.close", doorClosed)
+    subscribe(doorSensor, "contact.closed", doorClosed)
     subscribe(motionSensors, "motion.active", motionDetected)
 }
 
 def doorButtonPushed(event) {
+//    log.debug "doorButtonPushed"
     if (!state.standbyFlag) {
+//        log.debug "App on standby"
         doorLock.unlock()
         state.standbyFlag = true
         runIn(60*2, timeout)
@@ -65,19 +67,23 @@ def doorButtonPushed(event) {
 }
 
 def doorOpened(event) {
+//    log.debug "doorOpenedx"
     if (state.goodbyeFlag) {
         cancel()
     }
 }
 
 def doorClosed(event) {
+//    log.debug "doorClosed"
     if (state.standbyFlag) {
+//        log.debug "Schedule Lock in 30 seconds"
         state.goodbyeFlag = true
-        runIn(20, lock)
+        runIn(30, lock)
     }
 }
 
 def motionDetected(event) {
+//    log.debug "motionDetected"
     if (state.goodbyeFlag) {
         cancel()
         sendPush("Cannot lock because motion was detected")
@@ -93,8 +99,11 @@ def runGoodbye() {
 }
 
 def lock() {
+//    log.debug "lock"
     if (state.goodbyeFlag) {
         if (!isMotionActive()) {
+            state.standbyFlag = false
+            state.goodbyeFlag = false
             runGoodbye()
             unschedule(timeout)
         } else {
@@ -105,12 +114,14 @@ def lock() {
 }
 
 def timeout() {
+//    log.debug "timeout"
     cancel()
 }
 
 def cancel() {
-    state.standbyFlag = true
-    state.goodbyeFlag = true
+//    log.debug "cancel"
+    state.standbyFlag = false
+    state.goodbyeFlag = false
     unschedule(lock)
     unschedule(timeout)
     speaker.speak("Door locking cancelled")
