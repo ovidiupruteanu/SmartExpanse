@@ -39,7 +39,7 @@ metadata {
     }
 
     main(["switch"])
-    details(["switch", "refresh", "readparams", "writeparams", "test"])
+    details(["switch", "refresh"])
 
     preferences {
 
