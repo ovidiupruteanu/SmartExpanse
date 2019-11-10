@@ -16,6 +16,7 @@ preferences {
         input "doorSensor", "capability.contactSensor", title: "Contact Sensor"
         input "doorLock", "capability.lock", title: "Door Lock"
         input "motionSensors", "capability.motionSensor", title: "Motion Sensors", multiple: true
+        input "hallwayMotionSensor", "capability.motionSensor", title: "Hallway Motion Sensor"
         input "minutes", "number", title: "Minutes to Lock"
     }
 }
@@ -31,51 +32,31 @@ def updated() {
 }
 
 def initialize() {
-    state.doorIsClosed = false
-    state.doorIsLocked = false
     state.lockIsScheduled = false
-
     subscribe(doorSensor, "contact.open", doorOpened)
-    subscribe(doorSensor, "contact.closed", doorClosed)
-    subscribe(doorLock, "lock.locked", doorLocked)
-    subscribe(doorLock, "lock.unlocked", doorUnlocked)
     subscribe(motionSensors, "motion.active", motionDetected)
 }
 
 def doorOpened(event) {
-    //log.debug "doorOpened"
-    state.doorIsClosed = false
-    state.doorIsLocked = false
     state.lockIsScheduled = false
     unschedule(lock)
 }
 
-def doorClosed(event) {
-    //log.debug "doorClosed"
-    state.doorIsClosed = true
-}
-
-def doorLocked(event) {
-    state.doorIsLocked = true
-}
-
-def doorUnlocked(event) {
-    state.doorIsLocked = false
-}
-
 def motionDetected(event) {
-    //log.debug "motionDetected"
-    if (state.doorIsClosed && !state.doorIsLocked && !state.lockIsScheduled) {
-        //log.debug "lock scheduled"
+    if (doorSensor.currentState("contact").value == "closed" && doorLock.currentState("lock").value != "locked" && !state.lockIsScheduled) {
         state.lockIsScheduled = true
         runIn(60*minutes, lock)
     }
 }
 
 def lock() {
-    //log.debug "lock"
-    state.lockIsScheduled = false
-    if (state.doorIsClosed) {
-        doorLock.lock()
+    if (hallwayMotionSensor.currentState("motion").value == "active") {
+        log.debug "Hallway motion is active, retrying in 1 minute"
+        runIn(60, lock)
+    } else {
+        state.lockIsScheduled = false
+        if (doorSensor.currentState("contact").value == "closed") {
+            doorLock.lock()
+        }
     }
 }
