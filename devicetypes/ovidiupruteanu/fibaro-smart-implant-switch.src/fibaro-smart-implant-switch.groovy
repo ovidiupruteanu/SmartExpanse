@@ -1,5 +1,5 @@
 /**
- *  Fibaro Smart Implant Endpoint
+ *  Fibaro Smart Implant Switch
  *  (Model FGBS-222)
  *
  *	Author: Ovidiu Pruteanu (ovidiupruteanu)
@@ -15,7 +15,7 @@
  *
  */
 metadata {
-    definition(name: "Fibaro Smart Implant Endpoint", namespace: "ovidiupruteanu", author: "Ovidiu Pruteanu") {
+    definition(name: "Fibaro Smart Implant Switch", namespace: "ovidiupruteanu", author: "Ovidiu Pruteanu") {
         capability "Actuator"
         capability "Health Check"
         capability "Refresh"
@@ -30,8 +30,8 @@ metadata {
     tiles(scale: 2) {
         multiAttributeTile(name: "switch", type: "lighting", width: 6, height: 4, canChangeIcon: true) {
             tileAttribute("device.switch", key: "PRIMARY_CONTROL") {
-                attributeState "on", label: '${name}', action: "switch.off", icon: "st.switches.switch.on", backgroundColor: "#00A0DC"
-                attributeState "off", label: '${name}', action: "switch.on", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+                attributeState "on", label: '${name}', action: "switch.off", icon: "st.Home.home30", backgroundColor: "#00A0DC"
+                attributeState "off", label: '${name}', action: "switch.on", icon: "st.Home.home30", backgroundColor: "#ffffff"
             }
         }
 
@@ -53,38 +53,27 @@ def updated() {
 }
 
 def configure() {
-    // Device-Watch simply pings if no device events received for checkInterval duration of 32min
-    sendEvent(name: "checkInterval", value: 30 * 60 + 2 * 60, displayed: false, data: [protocol: "zwave", hubHardwareId: parent.hubID, offlinePingable: "1"])
+    // Device-Watch simply pings if no device events received for checkInterval duration 1 hour
+    sendEvent(name: "checkInterval", value: 1 * 60 * 60, displayed: false, data: [protocol: "zwave", hubHardwareId: parent.hubID, offlinePingable: "1"])
     refresh()
 }
 
-def handleZWave(physicalgraph.zwave.commands.basicv1.BasicReport cmd) {
-    switchEvents(cmd)
-}
-
-def handleZWave(physicalgraph.zwave.commands.basicv1.BasicSet cmd) {
-    switchEvents(cmd)
-}
-
-def handleZWave(physicalgraph.zwave.commands.switchbinaryv1.SwitchBinaryReport cmd) {
-    switchEvents(cmd)
-}
-
-def switchEvents(physicalgraph.zwave.Command cmd) {
+def zwaveEvent(physicalgraph.zwave.commands.switchbinaryv1.SwitchBinaryReport cmd) {
     def value = (cmd.value ? "on" : "off")
     sendEvent(name: "switch", value: value, descriptionText: "$device.displayName was turned $value")
 }
 
-def handleZWave(physicalgraph.zwave.Command cmd) {
-    sendEvent(descriptionText: "$device.displayName: $cmd", isStateChange: true, displayed: false)
+def zwaveEvent(physicalgraph.zwave.Command cmd) {
+    // Handles all Z-Wave commands we aren't interested in
+    [:]
 }
 
 def on() {
-    parent.childOn()
+    parent.switchToggle(device.deviceNetworkId, true)
 }
 
 def off() {
-    parent.childOff()
+    parent.switchToggle(device.deviceNetworkId, false)
 }
 
 /**
@@ -95,5 +84,5 @@ def ping() {
 }
 
 def refresh() {
-    parent.childRefresh()
+    parent.switchRefresh(device.deviceNetworkId)
 }

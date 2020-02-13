@@ -15,31 +15,148 @@
  *
  */
 metadata {
-    definition (name: "Fibaro Smart Implant", namespace: "ovidiupruteanu", author: "Ovidiu Pruteanu", vid: "generic-switch") {
+    definition (name: "Fibaro Smart Implant", namespace: "ovidiupruteanu", author: "Ovidiu Pruteanu", vid: "generic-temperature-measurement") {
         capability "Actuator"
         capability "Health Check"
         capability "Refresh"
         capability "Sensor"
-        capability "Switch"
-        capability "Button"
+        capability "Temperature Measurement"
+        command "readparams"
+        command "test"
+
+        command "createButton1"
+        command "createButton2"
+        command "createContact1"
+        command "createContact2"
+        command "createSwitch1"
+        command "createSwitch2"
+        command "createDS18B201"
+        command "createDS18B202"
+        command "createDS18B203"
+        command "createDS18B204"
+        command "createDS18B205"
+        command "createDS18B206"
+        command "createDHT22"
+
+        attribute "existsButton1", "number"
+        attribute "existsButton2", "number"
+        attribute "existsContact1", "number"
+        attribute "existsContact2", "number"
+        attribute "existsSwitch1", "number"
+        attribute "existsSwitch2", "number"
+        attribute "existsDS18B201", "number"
+        attribute "existsDS18B202", "number"
+        attribute "existsDS18B203", "number"
+        attribute "existsDS18B204", "number"
+        attribute "existsDS18B205", "number"
+        attribute "existsDS18B206", "number"
+        attribute "existsDHT22", "number"
+
 
         // I got the fingerprint prod and model from the z-wavealliance product page https://products.z-wavealliance.org/products/3195
         fingerprint mfr: "010F", prod: "0502", model: "1000"
     }
 
     tiles(scale: 2) {
-        standardTile("switch", "device.switch", width: 6, height: 4) {
-            state "off", label: "off", icon: "st.switches.switch.off", backgroundColor: "#ffffff", action: "switch.on"
-            state "on", label: "on", icon: "st.switches.switch.on", backgroundColor: "#00a0dc", action: "switch.off"
+        valueTile("temperature", "device.temperature", inactiveLabel: false, width: 2, height: 2) {
+            state "temperature", label: '${currentValue}°',
+                    backgroundColors: [
+                            [value: 32, color: "#153591"],
+                            [value: 44, color: "#1e9cbb"],
+                            [value: 59, color: "#90d2a7"],
+                            [value: 74, color: "#44b621"],
+                            [value: 84, color: "#f1d801"],
+                            [value: 92, color: "#d04e00"],
+                            [value: 98, color: "#bc2323"]
+                    ]
         }
-        standardTile("refresh", "device.switch", width: 2, height: 2, inactiveLabel: false, decoration: "flat") {
+
+        standardTile("refresh", "device.temperature", width: 2, height: 2, inactiveLabel: false, decoration: "flat") {
             state "default", label: '', action: "refresh.refresh", icon: "st.secondary.refresh"
         }
+        standardTile("empty2x2", "null", width: 2, height: 2, decoration: "flat") {
+            state "default", label: ''
+        }
+        valueTile("empty6x2", "null", width: 6, height: 2, decoration: "flat") {
+            state "default", label: "Choose which devices you wish to add. DS18B20 and DHT22 cannot be used simultaneously. DS18B20 sensors must be added in order, starting with #1"
+        }
+
+        standardTile("createButton1", "existsButton1", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'Button 1', icon: "st.unknown.zwave.remote-controller", action: "createButton1", backgroundColor: "#cccccc"
+            state "yes", label: 'Button 1', icon: "st.unknown.zwave.remote-controller", action: "createButton1", backgroundColor: "#00a0dc"
+        }
+        standardTile("createButton2", "existsButton2", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'Button 2', icon: "st.unknown.zwave.remote-controller", action: "createButton2", backgroundColor: "#cccccc"
+            state "yes", label: 'Button 2', icon: "st.unknown.zwave.remote-controller", action: "createButton2", backgroundColor: "#00a0dc"
+        }
+        standardTile("createContact1", "existsContact1", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'Alarm 1', icon:"st.contact.contact.closed", action: "createContact1", backgroundColor: "#cccccc"
+            state "yes", label: 'Alarm 1', icon:"st.contact.contact.closed", action: "createContact1", backgroundColor: "#00a0dc"
+        }
+        standardTile("createContact2", "existsContact2", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'Alarm 2', icon:"st.contact.contact.closed", action: "createContact2", backgroundColor: "#cccccc"
+            state "yes", label: 'Alarm 2', icon:"st.contact.contact.closed", action: "createContact2", backgroundColor: "#00a0dc"
+        }
+        standardTile("createSwitch1", "existsSwitch1", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'Switch 1', icon: "st.Home.home30", action: "createSwitch1", backgroundColor: "#cccccc"
+            state "yes", label: 'Switch 1', icon: "st.Home.home30", action: "createSwitch1", backgroundColor: "#00a0dc"
+        }
+        standardTile("createSwitch2", "existsSwitch2", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'Switch 2', icon: "st.Home.home30", action: "createSwitch2", backgroundColor: "#cccccc"
+            state "yes", label: 'Switch 2', icon: "st.Home.home30", action: "createSwitch2", backgroundColor: "#00a0dc"
+        }
+        standardTile("createDS18B201", "existsDS18B201", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'DS18B20 1', icon:"st.Weather.weather2", action: "createDS18B201", backgroundColor: "#cccccc"
+            state "yes", label: 'DS18B20 1', icon:"st.Weather.weather2", action: "createDS18B201", backgroundColor: "#00a0dc"
+        }
+        standardTile("createDS18B202", "existsDS18B202", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'DS18B20 2', icon:"st.Weather.weather2", action: "createDS18B202", backgroundColor: "#cccccc"
+            state "yes", label: 'DS18B20 2', icon:"st.Weather.weather2", action: "createDS18B202", backgroundColor: "#00a0dc"
+        }
+        standardTile("createDS18B203", "existsDS18B203", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'DS18B20 3', icon:"st.Weather.weather2", action: "createDS18B203", backgroundColor: "#cccccc"
+            state "yes", label: 'DS18B20 3', icon:"st.Weather.weather2", action: "createDS18B203", backgroundColor: "#00a0dc"
+        }
+        standardTile("createDS18B204", "existsDS18B204", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'DS18B20 4', icon:"st.Weather.weather2", action: "createDS18B204", backgroundColor: "#cccccc"
+            state "yes", label: 'DS18B20 4', icon:"st.Weather.weather2", action: "createDS18B204", backgroundColor: "#00a0dc"
+        }
+        standardTile("createDS18B205", "existsDS18B205", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'DS18B20 5', icon:"st.Weather.weather2", action: "createDS18B205", backgroundColor: "#cccccc"
+            state "yes", label: 'DS18B20 5', icon:"st.Weather.weather2", action: "createDS18B205", backgroundColor: "#00a0dc"
+        }
+        standardTile("createDS18B206", "existsDS18B206", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'DS18B20 6', icon:"st.Weather.weather2", action: "createDS18B206", backgroundColor: "#cccccc"
+            state "yes", label: 'DS18B20 6', icon:"st.Weather.weather2", action: "createDS18B206", backgroundColor: "#00a0dc"
+        }
+        standardTile("createDHT22", "existsDHT22", width: 2, height: 2, decoration: "flat") {
+            state "no", label: 'DHT22', icon:"st.Weather.weather12", action: "createDHT22", backgroundColor: "#cccccc"
+            state "yes", label: 'DHT22', icon:"st.Weather.weather12", action: "createDHT22", backgroundColor: "#00a0dc"
+        }
+
 
     }
 
-    main(["switch"])
-    details(["switch", "refresh"])
+    main "temperature"
+    details([
+            "temperature",
+            "refresh",
+            "empty2x2",
+            "empty6x2",
+            "createButton1",
+            "createContact1",
+            "createSwitch1",
+            "createButton2",
+            "createContact2",
+            "createSwitch2",
+            "createDS18B201",
+            "createDS18B202",
+            "createDS18B203",
+            "createDS18B204",
+            "createDS18B205",
+            "createDS18B206",
+            "createDHT22"
+    ])
 
     preferences {
 
@@ -69,16 +186,102 @@ metadata {
                     range: param.range,
                     //defaultValue: param.defaultValue,
                     // Per the documentation: Setting a default value for an input may render that selection in the mobile app, but the user still needs to enter data in that field. It’s recommended to not use defaultValue to avoid confusion.
-                    required: true,
+                    required: param.required,
                     displayDuringSetup: false
             )
         }
 
+        input (
+                name: "output1_local_protection",
+                title: "Output 1: Local Protection",
+                description: "Default: Input connected with output.",
+                type: "enum",
+                options: [
+                        0: "Input connected with output.",
+                        2: "Input disconnected from output.",
+                ],
+                required: false,
+                displayDuringSetup: false
+        )
+
+        input (
+                name: "output1_rf_protection",
+                title: "Output 1: RF Protection",
+                description: "Default: Output can be controlled via Z-Wave.",
+                type: "enum",
+                options: [
+                        0: "Output can be controlled via Z-Wave.",
+                        1: "Output cannot be controlled via Z-Wave.",
+                ],
+                required: false,
+                displayDuringSetup: false
+        )
+
+        input (
+                name: "output2_local_protection",
+                title: "Output 2: Local Protection",
+                description: "Default: Input connected with output.",
+                type: "enum",
+                options: [
+                        0: "Input connected with output.",
+                        2: "Input disconnected from output.",
+                ],
+                required: false,
+                displayDuringSetup: false
+        )
+
+        input (
+                name: "output2_rf_protection",
+                title: "Output 2: RF Protection",
+                description: "Default: Output can be controlled via Z-Wave.",
+                type: "enum",
+                options: [
+                        0: "Output can be controlled via Z-Wave.",
+                        1: "Output cannot be controlled via Z-Wave.",
+                ],
+                required: false,
+                displayDuringSetup: false
+        )
+
     }
 }
 
-private getOUTPUT_1_ENDPOINT() {5}
-private getOUTPUT_2_ENDPOINT() {6}
+private static getALARM_1_ENDPOINT() {1}
+private static getALARM_2_ENDPOINT() {2}
+
+private static getOUTPUT_1_ENDPOINT() {5}
+private static getOUTPUT_2_ENDPOINT() {6}
+private static getINTERNAL_TEMPERATURE_ENDPOINT() {7}
+private static getDHT22_TEMPERATURE_ENDPOINT() {8}
+private static getDHT22_HUMIDITY_ENDPOINT() {9}
+private static getDS18B20_MIN_ENDPOINT() {8}
+private static getDS18B20_MAX_ENDPOINT() {13}
+
+private getIsDHT22Connected() { findChildDevice(ENDPOINT_DHT22_ID()) as boolean }
+private getIsDS18B20Connected() {
+    (findChildDevice(ENDPOINT_DS18B20_ID(1)) ||
+            findChildDevice(ENDPOINT_DS18B20_ID(2)) ||
+            findChildDevice(ENDPOINT_DS18B20_ID(3)) ||
+            findChildDevice(ENDPOINT_DS18B20_ID(4)) ||
+            findChildDevice(ENDPOINT_DS18B20_ID(5)) ||
+            findChildDevice(ENDPOINT_DS18B20_ID(6))) as boolean
+}
+
+private static ENDPOINT_BUTTON_ID(num) {"button-$num"}
+private static ENDPOINT_CONTACT_ID(num) {"contact-$num"}
+private static ENDPOINT_SWITCH_ID(num) {"switch-$num"}
+private static ENDPOINT_DS18B20_ID(num) {"ds18b20-$num"}
+private static ENDPOINT_DHT22_ID() {"dht22"}
+private static ENDPOINT_BUTTON_LABEL(num) {"Button $num"}
+private static ENDPOINT_CONTACT_LABEL(num) {"Contact $num"}
+private static ENDPOINT_SWITCH_LABEL(num) {"Switch $num"}
+private static ENDPOINT_DS18B20_LABEL(num) {"DS18B20 $num"}
+private static ENDPOINT_DHT22_LABEL() {"DHT22"}
+private static getENDPOINT_BUTTON_DH() {"Fibaro Smart Implant Button"}
+private static getENDPOINT_CONTACT_DH() {"Fibaro Smart Implant Contact"}
+private static getENDPOINT_SWITCH_DH() {"Fibaro Smart Implant Switch"}
+private static getENDPOINT_DHT22_DH() {"Fibaro Smart Implant DHT22"}
+private static getENDPOINT_DS18B20_DH() {"Fibaro Smart Implant DS18B20"}
 
 private getButtonValueMap() {[
         0: "pushed",
@@ -88,68 +291,71 @@ private getButtonValueMap() {[
 
 def getCommandClassVersions() {
     [
-            0x5E:2, //COMMAND_CLASS_ZWAVEPLUS_INFO
+            //0x5E:2, //COMMAND_CLASS_ZWAVEPLUS_INFO
             0x25:1, //COMMAND_CLASS_SWITCH_BINARY
             0x85:2, //COMMAND_CLASS_ASSOCIATION
-            0x8E:3, //COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION
-            0x59:2, //COMMAND_CLASS_ASSOCIATION_GRP_INFO
-            0x55:2, //COMMAND_CLASS_TRANSPORT_SERVICE
-            0x86:2, //COMMAND_CLASS_VERSION
+            0x8E:2, //COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION
+            0x59:1, //COMMAND_CLASS_ASSOCIATION_GRP_INFO
+            0x55:1, //COMMAND_CLASS_TRANSPORT_SERVICE
+            0x86:1, //COMMAND_CLASS_VERSION
             0x72:2, //COMMAND_CLASS_MANUFACTURER_SPECIFIC
             0x5A:1, //COMMAND_CLASS_DEVICE_RESET_LOCALLY
             0x73:1, //COMMAND_CLASS_POWERLEVEL
             0x98:1, //COMMAND_CLASS_SECURITY
-            0x9F:1, //COMMAND_CLASS_SECURITY_2
+            //0x9F:1, //COMMAND_CLASS_SECURITY_2
             0x5B:1, //COMMAND_CLASS_CENTRAL_SCENE
-            0x31:11, //COMMAND_CLASS_SENSOR_MULTILEVEL
+            0x31:5, //COMMAND_CLASS_SENSOR_MULTILEVEL
             0x60:3, //COMMAND_CLASS_MULTI_CHANNEL
             0x70:1, //COMMAND_CLASS_CONFIGURATION
             0x56:1, //COMMAND_CLASS_CRC_16_ENCAP
             0x71:3, //COMMAND_CLASS_NOTIFICATION
             0x75:2, //COMMAND_CLASS_PROTECTION
-            0x7A:4, //COMMAND_CLASS_FIRMWARE_UPDATE_MD
-            0x6C:1, //COMMAND_CLASS_SUPERVISION
+            0x7A:2, //COMMAND_CLASS_FIRMWARE_UPDATE_MD
+            //0x6C:1, //COMMAND_CLASS_SUPERVISION
             0x22:1, //COMMAND_CLASS_APPLICATION_STATUS
             0x20:1, //COMMAND_CLASS_BASIC
     ]
 }
 
-private getPreferenceOptions() {
+private static getPreferenceOptions() {
 
     def options = [
             20: [
+                    required: false,
                     size: 1,
                     type: "enum",
                     defaultValue: 2,
                     defaultDescription: "Monostable button",
                     options: [
-                            //0: "Normally closed alarm input",
-                            //1: "Normally open alarm input",
+                            0: "Normally closed alarm input",
+                            1: "Normally open alarm input",
                             2: "Monostable button",
                             3: "Bistable button",
-                            //4: "Analog input without internal pull-up",
-                            //5: "Analog input with internal pullup",
+                            4: "Analog input without internal pull-up",
+                            5: "Analog input with internal pullup",
                     ],
                     name: "Input 1 - operating mode",
                     description: "This parameter allows to choose mode of 1st input (IN1). Change it depending on connected device."
             ],
             21: [
+                    required: false,
                     size: 1,
                     type: "enum",
                     defaultValue: 2,
                     defaultDescription: "Monostable button",
                     options: [
-                            //0: "Normally closed alarm input",
-                            //1: "Normally open alarm input",
+                            0: "Normally closed alarm input",
+                            1: "Normally open alarm input",
                             2: "Monostable button",
                             3: "Bistable button",
-                            //4: "Analog input without internal pull-up",
-                            //5: "Analog input with internal pullup",
+                            4: "Analog input without internal pull-up",
+                            5: "Analog input with internal pullup",
                     ],
                     name: "Input 2 - operating mode",
                     description: "This parameter allows to choose mode of 2nd input (IN2). Change it depending on connected device."
             ],
             24: [
+                    required: false,
                     size: 1,
                     type: "enum",
                     defaultValue: 0,
@@ -162,6 +368,7 @@ private getPreferenceOptions() {
                     description: "This parameter allows reversing operation of IN1 and IN2 inputs without changing the wiring. Use in case of incorrect wiring."
             ],
             25: [
+                    required: false,
                     size: 1,
                     type: "enum",
                     defaultValue: 0,
@@ -172,6 +379,26 @@ private getPreferenceOptions() {
                     ],
                     name: "Outputs orientation",
                     description: "This parameter allows reversing operation of OUT1 and OUT2 inputs without changing the wiring. Use in case of incorrect wiring."
+            ],
+            150: [
+                    required: false,
+                    size: 1,
+                    type: "number",
+                    defaultValue: 10,
+                    defaultDescription: "10 (100ms)",
+                    range: "(1..100)",
+                    name: "Input 1 - sensitivity",
+                    description: "This parameter defines the inertia time of IN1 input in alarm modes. Adjust this parameter to prevent bouncing or signal disruptions. Parameter is relevant only if parameter 20 is set to 0 or 1 (alarm mode).\n\n1-100 (10ms-1000ms, 10ms step)"
+            ],
+            151: [
+                    required: false,
+                    size: 1,
+                    type: "number",
+                    defaultValue: 10,
+                    defaultDescription: "10 (100ms)",
+                    range: "(1..100)",
+                    name: "Input 2 - sensitivity",
+                    description: "This parameter defines the inertia time of IN1 input in alarm modes. Adjust this parameter to prevent bouncing or signal disruptions. Parameter is relevant only if parameter 20 is set to 0 or 1 (alarm mode).\n\n1-100 (10ms-1000ms, 10ms step)"
             ],
 //            40: [
 //                    size: 1,
@@ -206,6 +433,7 @@ private getPreferenceOptions() {
 //                    description: "This parameter defines which actions result in sending scene ID and attribute assigned to them. Parameter is relevant only if parameter 21 is set to 2 or 3."
 //            ],
             154: [
+                    required: false,
                     size: 1,
                     type: "enum",
                     defaultValue: 0,
@@ -218,6 +446,7 @@ private getPreferenceOptions() {
                     description: "This parameter defines logic of OUT1 output operation."
             ],
             155: [
+                    required: false,
                     size: 1,
                     type: "enum",
                     defaultValue: 0,
@@ -230,22 +459,64 @@ private getPreferenceOptions() {
                     description: "This parameter defines logic of OUT2 output operation."
             ],
             156: [
+                    required: false,
                     size: 2,
                     type: "number",
                     defaultValue: 0,
                     defaultDescription: "0 = auto off disabled",
                     range: "(0..27000)",
                     name: "Output 1 - auto off",
-                    description: "This parameter defines time after which OUT1 will be automatically deactivated. (0 = auto off disabled, 0.1s step)"
+                    description: "This parameter defines time after which OUT1 will be automatically deactivated.\n\n0 – auto off disabled\n1-27000 (0.1s-45min, 0.1s step)"
             ],
             157: [
+                    required: false,
                     size: 2,
                     type: "number",
                     defaultValue: 0,
                     defaultDescription: "0 = auto off disabled",
                     range: "(0..27000)",
                     name: "Output 2 - auto off",
-                    description: "This parameter defines time after which OUT2 will be automatically deactivated. (0 = auto off disabled, 0.1s step)"
+                    description: "This parameter defines time after which OUT2 will be automatically deactivated.\n\n0 – auto off disabled\n1-27000 (0.1s-45min, 0.1s step)"
+            ],
+            65: [
+                    required: false,
+                    size: 2,
+                    type: "number",
+                    defaultValue: 5,
+                    defaultDescription: "5 (0.5°C)",
+                    range: "(0..255)",
+                    name: "Internal temperature sensor",
+                    description: "This parameter defines minimal change (from the last reported) of internal temperature sensor value that results in sending new report.\n\n0 - reporting on change disabled\n1-255 (0.1-25.5°C)"
+            ],
+            66: [
+                    required: false,
+                    size: 2,
+                    type: "number",
+                    defaultValue: 0,
+                    defaultDescription: "0 – periodical reports disabled",
+                    range: "(0..32400)",
+                    name: "Internal temperature sensor - periodical reports",
+                    description: "This parameter defines reporting period of internal temperature sensor value. Periodical reports are independent from changes in value.\n\n0 – periodical reports disabled\n60-32400 (60s-9h)"
+            ],
+            67: [
+                    required: false,
+                    size: 2,
+                    type: "number",
+                    defaultValue: 5,
+                    defaultDescription: "5 (0.5°C)",
+                    range: "(0..255)",
+                    name: "External sensors - minimal change to report",
+                    description: "This parameter defines minimal change (from the last reported) of external sensors values (DS18B20 or DHT22) that results in sending new report. Parameter is relevant only for connected DS18B20 or DHT22 sensors. \n\n0 - reporting on change disabled \n1-255 (0.1-25.5 units, 0.1)"
+            ],
+            68: [
+                    required: false,
+                    size: 2,
+                    type: "number",
+                    defaultValue: 0,
+                    defaultDescription: "0 – periodical reports disabled",
+                    range: "(0..32400)",
+                    name: "External sensors - periodical reports",
+                    description: "This parameter defines reporting period of analog inputs value. Periodical reports are independent from changes in value (parameter 67). Parameter is relevant only for connected DS18B20 or DHT22 sensors. \n\n0 – periodical reports disabled \n60-32400 (60s-9h)"
             ],
     ]
 
@@ -255,41 +526,102 @@ private getPreferenceOptions() {
 def installed() {
     // Device-Watch simply pings if no device events received for 32min(checkInterval)
     sendEvent(name: "checkInterval", value: 2 * 15 * 60 + 2 * 60, displayed: false, data: [protocol: "zwave", hubHardwareId: device.hub.hardwareID])
-    log.debug "implant installed"
-    createChildDevice()
+//    log.debug "implant installed"
     response(writeparams())
 }
 
 def updated() {
     // Device-Watch simply pings if no device events received for 32min(checkInterval)
     sendEvent(name: "checkInterval", value: 2 * 15 * 60 + 2 * 60, displayed: false, data: [protocol: "zwave", hubHardwareId: device.hub.hardwareID])
-    log.debug "implant updated"
+//    log.debug "implant updated"
     response(writeparams())
 }
 
-def createChildDevice() {
-    log.debug "createChildDevice()"
 
-    def componentLabel
-    if (device.displayName.endsWith('1')) {
-        componentLabel = "${device.displayName[0..-2]}2"
-    } else {
-        // no '1' at the end of deviceJoinName - use 2 to indicate second switch anyway
-        componentLabel = "$device.displayName 2"
+def createButton1(param) {
+    createChildDevice(ENDPOINT_BUTTON_ID(1), ENDPOINT_BUTTON_LABEL(1), ENDPOINT_BUTTON_DH)
+    sendEvent(name: 'existsButton1', value: "yes", displayed: false)
+}
+
+def createButton2() {
+    createChildDevice(ENDPOINT_BUTTON_ID(2), ENDPOINT_BUTTON_LABEL(2), ENDPOINT_BUTTON_DH)
+    sendEvent(name: 'existsButton2', value: "yes", displayed: false)
+}
+
+def createContact1() {
+    createChildDevice(ENDPOINT_CONTACT_ID(1), ENDPOINT_CONTACT_LABEL(1), ENDPOINT_CONTACT_DH)
+    sendEvent(name: 'existsContact1', value: "yes", displayed: false)
+}
+
+def createContact2() {
+    createChildDevice(ENDPOINT_CONTACT_ID(2), ENDPOINT_CONTACT_LABEL(2), ENDPOINT_CONTACT_DH)
+    sendEvent(name: 'existsContact2', value: "yes", displayed: false)
+}
+
+def createSwitch1() {
+    createChildDevice(ENDPOINT_SWITCH_ID(1), ENDPOINT_SWITCH_LABEL(1), ENDPOINT_SWITCH_DH)
+    sendEvent(name: 'existsSwitch1', value: "yes", displayed: false)
+}
+
+def createSwitch2() {
+    createChildDevice(ENDPOINT_SWITCH_ID(2), ENDPOINT_SWITCH_LABEL(2), ENDPOINT_SWITCH_DH)
+    sendEvent(name: 'existsSwitch2', value: "yes", displayed: false)
+}
+
+def createDS18B201() {
+    createChildDevice(ENDPOINT_DS18B20_ID(1), ENDPOINT_DS18B20_LABEL(1), ENDPOINT_DS18B20_DH)
+    sendEvent(name: 'existsDS18B201', value: "yes", displayed: false)
+}
+
+def createDS18B202() {
+    createChildDevice(ENDPOINT_DS18B20_ID(2), ENDPOINT_DS18B20_LABEL(2), ENDPOINT_DS18B20_DH)
+    sendEvent(name: 'existsDS18B202', value: "yes", displayed: false)
+}
+
+def createDS18B203() {
+    createChildDevice(ENDPOINT_DS18B20_ID(3), ENDPOINT_DS18B20_LABEL(3), ENDPOINT_DS18B20_DH)
+    sendEvent(name: 'existsDS18B203', value: "yes", displayed: false)
+}
+
+def createDS18B204() {
+    createChildDevice(ENDPOINT_DS18B20_ID(4), ENDPOINT_DS18B20_LABEL(4), ENDPOINT_DS18B20_DH)
+    sendEvent(name: 'existsDS18B204', value: "yes", displayed: false)
+}
+
+def createDS18B205() {
+    createChildDevice(ENDPOINT_DS18B20_ID(5), ENDPOINT_DS18B20_LABEL(5), ENDPOINT_DS18B20_DH)
+    sendEvent(name: 'existsDS18B205', value: "yes", displayed: false)
+}
+
+def createDS18B206() {
+    createChildDevice(ENDPOINT_DS18B20_ID(6), ENDPOINT_DS18B20_LABEL(6), ENDPOINT_DS18B20_DH)
+    sendEvent(name: 'existsDS18B206', value: "yes", displayed: false)
+}
+
+def createDHT22() {
+    createChildDevice(ENDPOINT_DHT22_ID(), ENDPOINT_DHT22_LABEL(), ENDPOINT_DHT22_DH)
+    sendEvent(name: 'existsDHT22', value: "yes", displayed: false)
+}
+
+def createChildDevice(String childId, String childLabel, String dh) {
+    def label = "$device.displayName $childLabel"
+    def dni = "${device.deviceNetworkId}-$childId"
+
+    if (findChildDevice(childId)) {
+        log.warn "$label already exists"
+        return
     }
+
     try {
-        String dni = "${device.deviceNetworkId}-ep2"
-        addChildDevice("Fibaro Smart Implant Endpoint", dni, device.hub.id,
-                [completedSetup: true, label: "${componentLabel}",
-                 isComponent: false, componentName: "ch2", componentLabel: "${componentLabel}"])
-        log.debug "Endpoint 2 (Fibaro Smart Implant Endpoint) added as $componentLabel"
+        addChildDevice(dh, dni, device.hub.id, [completedSetup: true, label: "${label}", isComponent: false])
+//        log.debug "Added $label"
     } catch (e) {
-        log.warn "Failed to add endpoint 2 ($desc) as Fibaro Smart Implant Endpoint - $e"
+        log.warn "Failed to add $label - $e"
     }
 }
 
+
 def writeparams() {
-    log.debug "writeparams()"
     def cmds = []
     cmds << encap(zwave.configurationV1.configurationSet(parameterNumber: 40, size: 1, scaledConfigurationValue: 11))
     cmds << encap(zwave.configurationV1.configurationSet(parameterNumber: 41, size: 1, scaledConfigurationValue: 11))
@@ -299,6 +631,15 @@ def writeparams() {
         def paramValue = settingsParam(num)
         cmds << encap(zwave.configurationV1.configurationSet(parameterNumber: paramNum, size: paramSize, scaledConfigurationValue: paramValue))
     }
+
+    def output1lp = settings.output1_local_protection != null ? settings.output1_local_protection as int : 0
+    def output1rp = settings.output1_rf_protection != null ? settings.output1_rf_protection as int : 0
+    def output2lp = settings.output2_local_protection != null ? settings.output2_local_protection as int : 0
+    def output2rp = settings.output2_rf_protection != null ? settings.output2_rf_protection as int : 0
+
+    cmds << encap(multiEncap(zwave.protectionV2.protectionSet(localProtectionState: output1lp, rfProtectionState: output1rp), OUTPUT_1_ENDPOINT))
+    cmds << encap(multiEncap(zwave.protectionV2.protectionSet(localProtectionState: output2lp, rfProtectionState: output2rp), OUTPUT_2_ENDPOINT))
+
     delayBetween(cmds, 500)
 }
 
@@ -306,97 +647,90 @@ def settingsParam(num) {
     settings."param${num}" != null ? settings."param${num}" as int : preferenceOptions[num].defaultValue as int
 }
 
-//def readparams() {
-//    log.debug "readparams()"
-//    def cmds = []
-//    preferenceOptions.each { paramNumber, param ->
-//        cmds << zwave.configurationV1.configurationGet(parameterNumber: paramNumber).format()
-//    };
-//    cmds << zwave.configurationV1.configurationGet(parameterNumber: 40).format()
-//    cmds << zwave.configurationV1.configurationGet(parameterNumber: 41).format()
-//    delayBetween(cmds, 500)
-//}
+def readparams() {
+    def cmds = []
+    preferenceOptions.each { paramNumber, param ->
+        cmds << zwave.configurationV1.configurationGet(parameterNumber: paramNumber).format()
+    };
+    cmds << zwave.configurationV1.configurationGet(parameterNumber: 40).format()
+    cmds << zwave.configurationV1.configurationGet(parameterNumber: 41).format()
+    delayBetween(cmds, 500)
+}
+
+def findChildDevice(String deviceId) {
+    return childDevices.find{it.deviceNetworkId == "${device.deviceNetworkId}-${deviceId}"}
+}
+
+def verifyIfChildrenExist() {
+    sendEvent(name: 'existsButton1', value: findChildDevice(ENDPOINT_BUTTON_ID(1)) ? "yes" : "no", displayed: false)
+    sendEvent(name: 'existsButton2', value: findChildDevice(ENDPOINT_BUTTON_ID(2)) ? "yes" : "no", displayed: false)
+    sendEvent(name: 'existsContact1', value: findChildDevice(ENDPOINT_CONTACT_ID(1)) ? "yes" : "no", displayed: false)
+    sendEvent(name: 'existsContact2', value: findChildDevice(ENDPOINT_CONTACT_ID(2)) ? "yes" : "no", displayed: false)
+    sendEvent(name: 'existsSwitch1', value: findChildDevice(ENDPOINT_SWITCH_ID(1)) ? "yes" : "no", displayed: false)
+    sendEvent(name: 'existsSwitch2', value: findChildDevice(ENDPOINT_SWITCH_ID(2)) ? "yes" : "no", displayed: false)
+    sendEvent(name: 'existsDS18B201', value: findChildDevice(ENDPOINT_DS18B20_ID(1)) ? "yes" : "no", displayed: false)
+    sendEvent(name: 'existsDS18B202', value: findChildDevice(ENDPOINT_DS18B20_ID(2)) ? "yes" : "no", displayed: false)
+    sendEvent(name: 'existsDS18B203', value: findChildDevice(ENDPOINT_DS18B20_ID(3)) ? "yes" : "no", displayed: false)
+    sendEvent(name: 'existsDS18B204', value: findChildDevice(ENDPOINT_DS18B20_ID(4)) ? "yes" : "no", displayed: false)
+    sendEvent(name: 'existsDS18B205', value: findChildDevice(ENDPOINT_DS18B20_ID(5)) ? "yes" : "no", displayed: false)
+    sendEvent(name: 'existsDS18B206', value: findChildDevice(ENDPOINT_DS18B20_ID(6)) ? "yes" : "no", displayed: false)
+    sendEvent(name: 'existsDHT22', value: findChildDevice(ENDPOINT_DHT22_ID()) ? "yes" : "no", displayed: false)
+}
 
 /**
  * PING is used by Device-Watch in attempt to reach the Device
  * */
 def ping() {
-    log.debug "ping() called"
     refresh()
 }
 
 def refresh() {
-    log.debug "refresh()"
-    [encap(multiEncap(zwave.switchBinaryV1.switchBinaryGet(), OUTPUT_1_ENDPOINT))]
+    verifyIfChildrenExist()
+    [encap(multiEncap(zwave.sensorMultilevelV5.sensorMultilevelGet(sensorType: 0x01), INTERNAL_TEMPERATURE_ENDPOINT))]
 }
 
-def on() {
-    log.debug "on()"
+def switchToggle(String childNetworkId, Boolean onOrOff) {
+    def deviceNum = childNetworkId.replaceAll("^${device.deviceNetworkId}-${ENDPOINT_SWITCH_ID("")}", "") as int
+    def endpoint = OUTPUT_1_ENDPOINT + deviceNum - 1
+    def logicOfOperation = settingsParam(deviceNum == 1 ? 154 : 155)
+    onOrOff = logicOfOperation == 0 ? onOrOff : !onOrOff
+    def switchValue = onOrOff ? 0xFF : 0x00;
 
-    def switchValue = settingsParam(154) == 0 ? 0xFF : 0x00;
-
-    def cmds = []
-    cmds << encap(multiEncap(zwave.switchBinaryV1.switchBinarySet(switchValue: switchValue), OUTPUT_1_ENDPOINT))
-    cmds << "delay 100"
-    cmds << encap(multiEncap(zwave.switchBinaryV1.switchBinaryGet(), OUTPUT_1_ENDPOINT))
-
-    def autoOff = settingsParam(156)
-    if (autoOff > 0) {
-        cmds << "delay ${autoOff*100+1000}"
-        cmds << encap(multiEncap(zwave.switchBinaryV1.switchBinaryGet(), OUTPUT_1_ENDPOINT))
-    }
-
-    cmds
-}
-
-def off() {
-    log.debug "off()"
-
-    def switchValue = settingsParam(154) == 0 ? 0x00 : 0xFF;
-
-    def cmds = []
-    cmds << encap(multiEncap(zwave.switchBinaryV1.switchBinarySet(switchValue: switchValue), OUTPUT_1_ENDPOINT))
-    cmds << "delay 100"
-    cmds << encap(multiEncap(zwave.switchBinaryV1.switchBinaryGet(), OUTPUT_1_ENDPOINT))
-    cmds
-}
-
-def childOn() {
-    log.debug "childOn()"
-
-    def switchValue = settingsParam(155) == 0 ? 0xFF : 0x00;
-
-    def cmds = []
-    cmds << encap(multiEncap(zwave.switchBinaryV1.switchBinarySet(switchValue: switchValue), OUTPUT_2_ENDPOINT))
-    cmds << "delay 100"
-    cmds << encap(multiEncap(zwave.switchBinaryV1.switchBinaryGet(), OUTPUT_2_ENDPOINT))
-
-    def autoOff = settingsParam(157)
-    if (autoOff > 0) {
-        cmds << "delay ${autoOff*100+1000}"
-        cmds << encap(multiEncap(zwave.switchBinaryV1.switchBinaryGet(), OUTPUT_2_ENDPOINT))
-    }
-
-    sendHubCommand(cmds)
-}
-
-def childOff() {
-    log.debug "childOff()"
-
-    def switchValue = settingsParam(155) == 0 ? 0x00 : 0xFF;
-
-    def commands = [multiEncap(zwave.switchBinaryV1.switchBinarySet(switchValue: switchValue), OUTPUT_2_ENDPOINT),
-                    multiEncap(zwave.switchBinaryV1.switchBinaryGet(), OUTPUT_2_ENDPOINT)]
+    def commands = [multiEncap(zwave.switchBinaryV1.switchBinarySet(switchValue: switchValue), endpoint),
+                    multiEncap(zwave.switchBinaryV1.switchBinaryGet(), endpoint)]
     sendHubCommand(commands, 100)
 }
 
-def childRefresh() {
-    log.debug "childRefresh()"
-
-    def commands = [multiEncap(zwave.switchBinaryV1.switchBinaryGet(), OUTPUT_2_ENDPOINT)]
+def switchRefresh(String childNetworkId) {
+    def deviceNum = childNetworkId.replaceAll("^${device.deviceNetworkId}-${ENDPOINT_SWITCH_ID("")}", "") as int
+    def endpoint = OUTPUT_1_ENDPOINT + deviceNum - 1
+    def commands = [multiEncap(zwave.switchBinaryV1.switchBinaryGet(), endpoint)]
     sendHubCommand(commands, 100)
 }
 
+def dht22Refresh() {
+    def commands = [
+            multiEncap(zwave.sensorMultilevelV5.sensorMultilevelGet(sensorType: 0x01), DHT22_TEMPERATURE_ENDPOINT),
+            multiEncap(zwave.sensorMultilevelV5.sensorMultilevelGet(sensorType: 0x05), DHT22_HUMIDITY_ENDPOINT)
+    ]
+    sendHubCommand(commands, 100)
+}
+def ds18b20Refresh(String childNetworkId) {
+    def deviceNum = childNetworkId.replaceAll("^${device.deviceNetworkId}-${ENDPOINT_DS18B20_ID("")}", "") as int
+    def endpoint = DS18B20_MIN_ENDPOINT + deviceNum - 1
+    def commands = [
+            multiEncap(zwave.sensorMultilevelV5.sensorMultilevelGet(sensorType: 0x01), endpoint)
+    ]
+    sendHubCommand(commands, 100)
+}
+def contactRefresh(String childNetworkId) {
+    def deviceNum = childNetworkId.replaceAll("^${device.deviceNetworkId}-${ENDPOINT_CONTACT_ID("")}", "") as int
+    def endpoint = ALARM_1_ENDPOINT + deviceNum - 1
+    def commands = [
+            multiEncap(zwave.notificationV3.notificationGet(notificationType: 0x07), endpoint)
+    ]
+    sendHubCommand(commands, 100)
+}
 /*
  * Z-Wave Events
  */
@@ -416,66 +750,68 @@ def parse(String description) {
     result
 }
 
-def zwaveEvent(physicalgraph.zwave.commands.switchbinaryv1.SwitchBinaryReport cmd) {
-    log.debug "SwitchBinaryReport"
-    [name: "switch", value: cmd.value ? "on" : "off", isStateChange: true]
+def zwaveEvent(physicalgraph.zwave.commands.sensormultilevelv5.SensorMultilevelReport cmd) {
+    // Internal Temperature
+    if (cmd.sensorType == 1) {
+        def map = [:]
+        map.name = "temperature"
+        def cmdScale = cmd.scale == 1 ? "F" : "C"
+        map.value = convertTemperatureIfNeeded(cmd.scaledSensorValue, cmdScale, cmd.precision)
+        map.unit = getTemperatureScale()
+        createEvent(map)
+    }
 }
 
 def zwaveEvent(physicalgraph.zwave.commands.multichannelv3.MultiChannelCmdEncap cmd) {
-    //log.debug "Multi Channel CMD: ${cmd}"
+//    log.debug "Multi Channel CMD: ${cmd}"
+//    log.debug "Multi Channel Endpoint: ${cmd.sourceEndPoint}"
 
     def encapsulatedCommand = cmd.encapsulatedCommand(getCommandClassVersions())
 
-    //log.debug "Encapsulated CMD: ${encapsulatedCommand}"
+//    log.debug "Encapsulated CMD (${cmd.sourceEndPoint}): ${encapsulatedCommand}"
 
     if (cmd.sourceEndPoint == OUTPUT_1_ENDPOINT) {
-        // Switch events for output 1 are handled by this DH
-        zwaveEvent(encapsulatedCommand)
+        findChildDevice(ENDPOINT_SWITCH_ID(1))?.zwaveEvent(encapsulatedCommand)
     } else if (cmd.sourceEndPoint == OUTPUT_2_ENDPOINT) {
-        // Switch events for output 2 are handled by this Endpoint DH
-        childDevices[0]?.handleZWave(encapsulatedCommand)
+        findChildDevice(ENDPOINT_SWITCH_ID(2))?.zwaveEvent(encapsulatedCommand)
+    } else if (cmd.sourceEndPoint == INTERNAL_TEMPERATURE_ENDPOINT) {
+        // Internal temperature is handled by this DH
+        zwaveEvent(encapsulatedCommand)
+    } else if (cmd.sourceEndPoint >= DS18B20_MIN_ENDPOINT && cmd.sourceEndPoint <= DS18B20_MAX_ENDPOINT) {
+        if (isDHT22Connected) {
+            def child = findChildDevice(ENDPOINT_DHT22_ID())
+            child?.zwaveEvent(encapsulatedCommand)
+        }
+        if (isDS18B20Connected) {
+            def deviceNum = cmd.sourceEndPoint - DS18B20_MIN_ENDPOINT + 1
+            findChildDevice(ENDPOINT_DS18B20_ID(deviceNum))?.zwaveEvent(encapsulatedCommand)
+        }
+    } else if (cmd.sourceEndPoint == ALARM_1_ENDPOINT) {
+        findChildDevice(ENDPOINT_CONTACT_ID(1))?.zwaveEvent(encapsulatedCommand)
+    } else if (cmd.sourceEndPoint == ALARM_2_ENDPOINT) {
+        findChildDevice(ENDPOINT_CONTACT_ID(2))?.zwaveEvent(encapsulatedCommand)
+    } else {
+//        log.debug "Unhandled Multi Channel Endpoint: ${cmd.sourceEndPoint}"
+//        log.debug "Unhandled Encapsulated CMD: ${encapsulatedCommand}"
+        zwaveEvent(encapsulatedCommand)
     }
+
 
 }
 
 def zwaveEvent(physicalgraph.zwave.commands.centralscenev1.CentralSceneNotification cmd) {
     // Handle input button presses
-    log.debug "CentralSceneNotification: ${cmd}"
-
-    if (!buttonValueMap.keySet().contains(cmd.keyAttributes as int)) {
-        return [:]
-    }
-
-    def buttonNumber = cmd.sceneNumber
-    def buttonValue = buttonValueMap[(int) cmd.keyAttributes]
-    def event = [createEvent(name: "button", value: buttonValue, descriptionText: "Button ${buttonNumber} was ${buttonValue}", data: [buttonNumber: buttonNumber], isStateChange: true)]
-
-    // The implant doesn't send a SwitchBinaryReport if either output is turned on by the button press
-    // We need to query it after a single button press
-    if (cmd.keyAttributes == 0) {
-        def endpointNumber = cmd.sceneNumber == 1 ? OUTPUT_1_ENDPOINT : OUTPUT_2_ENDPOINT
-        def autoOff = cmd.sceneNumber == 1 ? settingsParam(156) : settingsParam(157)
-        def cmds = ["delay 1000", encap(multiEncap(zwave.switchBinaryV1.switchBinaryGet(), endpointNumber))]
-        if (autoOff > 0) {
-            cmds << "delay ${autoOff*100+1000}"
-            cmds << encap(multiEncap(zwave.switchBinaryV1.switchBinaryGet(), endpointNumber))
-        }
-        event << response(cmds)
-    }
-
-    // Event is an array containing the device button event and optionally the z-wave command for getting the status of the outputs
-    return event
+    findChildDevice(ENDPOINT_BUTTON_ID(cmd.sceneNumber))?.zwaveEvent(cmd)
 }
+
 
 def zwaveEvent(physicalgraph.zwave.commands.configurationv1.ConfigurationReport cmd) {
     log.debug "Configuration: (${cmd.parameterNumber}) ${preferenceOptions[cmd.parameterNumber as int]?.name} = ${cmd.scaledConfigurationValue}"
-    //log.debug "ConfigurationReport: ${cmd}"
     [:]
 }
 
 def zwaveEvent(physicalgraph.zwave.Command cmd) {
     // Handles all Z-Wave commands we aren't interested in
-    log.debug "Unhandled Event!"
     [:]
 }
 
