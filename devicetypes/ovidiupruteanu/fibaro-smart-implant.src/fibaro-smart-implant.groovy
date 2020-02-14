@@ -22,36 +22,12 @@ metadata {
         capability "Sensor"
         capability "Temperature Measurement"
         command "readparams"
-        command "test"
+        command "createTest"
 
-        command "createButton1"
-        command "createButton2"
-        command "createContact1"
-        command "createContact2"
-        command "createSwitch1"
-        command "createSwitch2"
-        command "createDS18B201"
-        command "createDS18B202"
-        command "createDS18B203"
-        command "createDS18B204"
-        command "createDS18B205"
-        command "createDS18B206"
-        command "createDHT22"
-
-        attribute "existsButton1", "number"
-        attribute "existsButton2", "number"
-        attribute "existsContact1", "number"
-        attribute "existsContact2", "number"
-        attribute "existsSwitch1", "number"
-        attribute "existsSwitch2", "number"
-        attribute "existsDS18B201", "number"
-        attribute "existsDS18B202", "number"
-        attribute "existsDS18B203", "number"
-        attribute "existsDS18B204", "number"
-        attribute "existsDS18B205", "number"
-        attribute "existsDS18B206", "number"
-        attribute "existsDHT22", "number"
-
+        deviceTiles.each {
+            command "create${it.name}"
+            attribute "exists${it.name}", "string"
+        }
 
         // I got the fingerprint prod and model from the z-wavealliance product page https://products.z-wavealliance.org/products/3195
         fingerprint mfr: "010F", prod: "0502", model: "1000"
@@ -81,82 +57,17 @@ metadata {
             state "default", label: "Choose which devices you wish to add. DS18B20 and DHT22 cannot be used simultaneously. DS18B20 sensors must be added in order, starting with #1"
         }
 
-        standardTile("createButton1", "existsButton1", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'Button 1', icon: "st.unknown.zwave.remote-controller", action: "createButton1", backgroundColor: "#cccccc"
-            state "yes", label: 'Button 1', icon: "st.unknown.zwave.remote-controller", action: "createButton1", backgroundColor: "#00a0dc"
+        deviceTiles.each { tile ->
+            standardTile("create${tile.name}", "exists${tile.name}", width: 2, height: 2, decoration: "flat") {
+                state "no", label: "${tile.label}", icon: tile.icon, action: "create${tile.name}", backgroundColor: "#cccccc"
+                state "yes", label: "${tile.label}", icon: tile.icon, action: "create${tile.name}", backgroundColor: "#00a0dc"
+            }
         }
-        standardTile("createButton2", "existsButton2", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'Button 2', icon: "st.unknown.zwave.remote-controller", action: "createButton2", backgroundColor: "#cccccc"
-            state "yes", label: 'Button 2', icon: "st.unknown.zwave.remote-controller", action: "createButton2", backgroundColor: "#00a0dc"
-        }
-        standardTile("createContact1", "existsContact1", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'Alarm 1', icon:"st.contact.contact.closed", action: "createContact1", backgroundColor: "#cccccc"
-            state "yes", label: 'Alarm 1', icon:"st.contact.contact.closed", action: "createContact1", backgroundColor: "#00a0dc"
-        }
-        standardTile("createContact2", "existsContact2", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'Alarm 2', icon:"st.contact.contact.closed", action: "createContact2", backgroundColor: "#cccccc"
-            state "yes", label: 'Alarm 2', icon:"st.contact.contact.closed", action: "createContact2", backgroundColor: "#00a0dc"
-        }
-        standardTile("createSwitch1", "existsSwitch1", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'Switch 1', icon: "st.Home.home30", action: "createSwitch1", backgroundColor: "#cccccc"
-            state "yes", label: 'Switch 1', icon: "st.Home.home30", action: "createSwitch1", backgroundColor: "#00a0dc"
-        }
-        standardTile("createSwitch2", "existsSwitch2", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'Switch 2', icon: "st.Home.home30", action: "createSwitch2", backgroundColor: "#cccccc"
-            state "yes", label: 'Switch 2', icon: "st.Home.home30", action: "createSwitch2", backgroundColor: "#00a0dc"
-        }
-        standardTile("createDS18B201", "existsDS18B201", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'DS18B20 1', icon:"st.Weather.weather2", action: "createDS18B201", backgroundColor: "#cccccc"
-            state "yes", label: 'DS18B20 1', icon:"st.Weather.weather2", action: "createDS18B201", backgroundColor: "#00a0dc"
-        }
-        standardTile("createDS18B202", "existsDS18B202", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'DS18B20 2', icon:"st.Weather.weather2", action: "createDS18B202", backgroundColor: "#cccccc"
-            state "yes", label: 'DS18B20 2', icon:"st.Weather.weather2", action: "createDS18B202", backgroundColor: "#00a0dc"
-        }
-        standardTile("createDS18B203", "existsDS18B203", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'DS18B20 3', icon:"st.Weather.weather2", action: "createDS18B203", backgroundColor: "#cccccc"
-            state "yes", label: 'DS18B20 3', icon:"st.Weather.weather2", action: "createDS18B203", backgroundColor: "#00a0dc"
-        }
-        standardTile("createDS18B204", "existsDS18B204", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'DS18B20 4', icon:"st.Weather.weather2", action: "createDS18B204", backgroundColor: "#cccccc"
-            state "yes", label: 'DS18B20 4', icon:"st.Weather.weather2", action: "createDS18B204", backgroundColor: "#00a0dc"
-        }
-        standardTile("createDS18B205", "existsDS18B205", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'DS18B20 5', icon:"st.Weather.weather2", action: "createDS18B205", backgroundColor: "#cccccc"
-            state "yes", label: 'DS18B20 5', icon:"st.Weather.weather2", action: "createDS18B205", backgroundColor: "#00a0dc"
-        }
-        standardTile("createDS18B206", "existsDS18B206", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'DS18B20 6', icon:"st.Weather.weather2", action: "createDS18B206", backgroundColor: "#cccccc"
-            state "yes", label: 'DS18B20 6', icon:"st.Weather.weather2", action: "createDS18B206", backgroundColor: "#00a0dc"
-        }
-        standardTile("createDHT22", "existsDHT22", width: 2, height: 2, decoration: "flat") {
-            state "no", label: 'DHT22', icon:"st.Weather.weather12", action: "createDHT22", backgroundColor: "#cccccc"
-            state "yes", label: 'DHT22', icon:"st.Weather.weather12", action: "createDHT22", backgroundColor: "#00a0dc"
-        }
-
 
     }
 
     main "temperature"
-    details([
-            "temperature",
-            "refresh",
-            "empty2x2",
-            "empty6x2",
-            "createButton1",
-            "createContact1",
-            "createSwitch1",
-            "createButton2",
-            "createContact2",
-            "createSwitch2",
-            "createDS18B201",
-            "createDS18B202",
-            "createDS18B203",
-            "createDS18B204",
-            "createDS18B205",
-            "createDS18B206",
-            "createDHT22"
-    ])
+    details(["temperature", "refresh", "empty2x2", "empty6x2"] + deviceTiles.collect{ "create${it.name}"})
 
     preferences {
 
@@ -248,7 +159,6 @@ metadata {
 
 private static getALARM_1_ENDPOINT() {1}
 private static getALARM_2_ENDPOINT() {2}
-
 private static getOUTPUT_1_ENDPOINT() {5}
 private static getOUTPUT_2_ENDPOINT() {6}
 private static getINTERNAL_TEMPERATURE_ENDPOINT() {7}
@@ -273,23 +183,17 @@ private static ENDPOINT_SWITCH_ID(num) {"switch-$num"}
 private static ENDPOINT_DS18B20_ID(num) {"ds18b20-$num"}
 private static ENDPOINT_DHT22_ID() {"dht22"}
 private static ENDPOINT_BUTTON_LABEL(num) {"Button $num"}
-private static ENDPOINT_CONTACT_LABEL(num) {"Contact $num"}
+private static ENDPOINT_CONTACT_LABEL(num) {"Alarm $num"}
 private static ENDPOINT_SWITCH_LABEL(num) {"Switch $num"}
 private static ENDPOINT_DS18B20_LABEL(num) {"DS18B20 $num"}
 private static ENDPOINT_DHT22_LABEL() {"DHT22"}
-private static getENDPOINT_BUTTON_DH() {"Fibaro Smart Implant Button"}
-private static getENDPOINT_CONTACT_DH() {"Fibaro Smart Implant Contact"}
-private static getENDPOINT_SWITCH_DH() {"Fibaro Smart Implant Switch"}
-private static getENDPOINT_DHT22_DH() {"Fibaro Smart Implant DHT22"}
-private static getENDPOINT_DS18B20_DH() {"Fibaro Smart Implant DS18B20"}
+private static ENDPOINT_BUTTON_DH() {"Fibaro Smart Implant Button"}
+private static ENDPOINT_CONTACT_DH() {"Fibaro Smart Implant Contact"}
+private static ENDPOINT_SWITCH_DH() {"Fibaro Smart Implant Switch"}
+private static ENDPOINT_DHT22_DH() {"Fibaro Smart Implant DHT22"}
+private static ENDPOINT_DS18B20_DH() {"Fibaro Smart Implant DS18B20"}
 
-private getButtonValueMap() {[
-        0: "pushed",
-        2: "held",
-        3: "double"
-]}
-
-def getCommandClassVersions() {
+private static def getCommandClassVersions() {
     [
             //0x5E:2, //COMMAND_CLASS_ZWAVEPLUS_INFO
             0x25:1, //COMMAND_CLASS_SWITCH_BINARY
@@ -523,87 +427,68 @@ private static getPreferenceOptions() {
     return options
 }
 
+private static getDeviceTiles() {
+    [
+            [name: "Button1", label: ENDPOINT_BUTTON_LABEL(1), icon: "st.unknown.zwave.remote-controller", id: ENDPOINT_BUTTON_ID(1), dh: ENDPOINT_BUTTON_DH()],
+            [name: "Contact1", label: ENDPOINT_CONTACT_LABEL(1), icon: "st.contact.contact.closed", id: ENDPOINT_CONTACT_ID(1), dh: ENDPOINT_CONTACT_DH()],
+            [name: "Switch1", label: ENDPOINT_SWITCH_LABEL(1), icon: "st.Home.home30", id: ENDPOINT_SWITCH_ID(1), dh: ENDPOINT_SWITCH_DH()],
+            [name: "Button2", label: ENDPOINT_BUTTON_LABEL(2), icon: "st.unknown.zwave.remote-controller", id: ENDPOINT_BUTTON_ID(2), dh: ENDPOINT_BUTTON_DH()],
+            [name: "Contact2", label: ENDPOINT_CONTACT_LABEL(2), icon: "st.contact.contact.closed", id: ENDPOINT_CONTACT_ID(2), dh: ENDPOINT_CONTACT_DH()],
+            [name: "Switch2", label: ENDPOINT_SWITCH_LABEL(2), icon: "st.Home.home30", id: ENDPOINT_SWITCH_ID(2), dh: ENDPOINT_SWITCH_DH()],
+            [name: "DS18B201", label: ENDPOINT_DS18B20_LABEL(1), icon: "st.Weather.weather2", id: ENDPOINT_DS18B20_ID(1), dh: ENDPOINT_DS18B20_DH()],
+            [name: "DS18B202", label: ENDPOINT_DS18B20_LABEL(2), icon: "st.Weather.weather2", id: ENDPOINT_DS18B20_ID(2), dh: ENDPOINT_DS18B20_DH()],
+            [name: "DS18B203", label: ENDPOINT_DS18B20_LABEL(3), icon: "st.Weather.weather2", id: ENDPOINT_DS18B20_ID(3), dh: ENDPOINT_DS18B20_DH()],
+            [name: "DS18B204", label: ENDPOINT_DS18B20_LABEL(4), icon: "st.Weather.weather2", id: ENDPOINT_DS18B20_ID(4), dh: ENDPOINT_DS18B20_DH()],
+            [name: "DS18B205", label: ENDPOINT_DS18B20_LABEL(5), icon: "st.Weather.weather2", id: ENDPOINT_DS18B20_ID(5), dh: ENDPOINT_DS18B20_DH()],
+            [name: "DS18B206", label: ENDPOINT_DS18B20_LABEL(6), icon: "st.Weather.weather2", id: ENDPOINT_DS18B20_ID(6), dh: ENDPOINT_DS18B20_DH()],
+            [name: "DHT22", label: ENDPOINT_DHT22_LABEL(), icon: "st.Weather.weather12", id: ENDPOINT_DHT22_ID(), dh: ENDPOINT_DHT22_DH()],
+    ]
+}
+
 def installed() {
     // Device-Watch simply pings if no device events received for 32min(checkInterval)
     sendEvent(name: "checkInterval", value: 2 * 15 * 60 + 2 * 60, displayed: false, data: [protocol: "zwave", hubHardwareId: device.hub.hardwareID])
-//    log.debug "implant installed"
     response(writeparams())
 }
 
 def updated() {
     // Device-Watch simply pings if no device events received for 32min(checkInterval)
     sendEvent(name: "checkInterval", value: 2 * 15 * 60 + 2 * 60, displayed: false, data: [protocol: "zwave", hubHardwareId: device.hub.hardwareID])
-//    log.debug "implant updated"
     response(writeparams())
 }
 
+def createButton1() { createChildDevice("Button1") }
 
-def createButton1(param) {
-    createChildDevice(ENDPOINT_BUTTON_ID(1), ENDPOINT_BUTTON_LABEL(1), ENDPOINT_BUTTON_DH)
-    sendEvent(name: 'existsButton1', value: "yes", displayed: false)
-}
+def createButton2() { createChildDevice("Button2") }
 
-def createButton2() {
-    createChildDevice(ENDPOINT_BUTTON_ID(2), ENDPOINT_BUTTON_LABEL(2), ENDPOINT_BUTTON_DH)
-    sendEvent(name: 'existsButton2', value: "yes", displayed: false)
-}
+def createContact1() { createChildDevice("Contact1") }
 
-def createContact1() {
-    createChildDevice(ENDPOINT_CONTACT_ID(1), ENDPOINT_CONTACT_LABEL(1), ENDPOINT_CONTACT_DH)
-    sendEvent(name: 'existsContact1', value: "yes", displayed: false)
-}
+def createContact2() { createChildDevice("Contact2") }
 
-def createContact2() {
-    createChildDevice(ENDPOINT_CONTACT_ID(2), ENDPOINT_CONTACT_LABEL(2), ENDPOINT_CONTACT_DH)
-    sendEvent(name: 'existsContact2', value: "yes", displayed: false)
-}
+def createSwitch1() { createChildDevice("Switch1") }
 
-def createSwitch1() {
-    createChildDevice(ENDPOINT_SWITCH_ID(1), ENDPOINT_SWITCH_LABEL(1), ENDPOINT_SWITCH_DH)
-    sendEvent(name: 'existsSwitch1', value: "yes", displayed: false)
-}
+def createSwitch2() { createChildDevice("Switch2") }
 
-def createSwitch2() {
-    createChildDevice(ENDPOINT_SWITCH_ID(2), ENDPOINT_SWITCH_LABEL(2), ENDPOINT_SWITCH_DH)
-    sendEvent(name: 'existsSwitch2', value: "yes", displayed: false)
-}
+def createDS18B201() { createChildDevice("DS18B201") }
 
-def createDS18B201() {
-    createChildDevice(ENDPOINT_DS18B20_ID(1), ENDPOINT_DS18B20_LABEL(1), ENDPOINT_DS18B20_DH)
-    sendEvent(name: 'existsDS18B201', value: "yes", displayed: false)
-}
+def createDS18B202() { createChildDevice("DS18B202") }
 
-def createDS18B202() {
-    createChildDevice(ENDPOINT_DS18B20_ID(2), ENDPOINT_DS18B20_LABEL(2), ENDPOINT_DS18B20_DH)
-    sendEvent(name: 'existsDS18B202', value: "yes", displayed: false)
-}
+def createDS18B203() { createChildDevice("DS18B203") }
 
-def createDS18B203() {
-    createChildDevice(ENDPOINT_DS18B20_ID(3), ENDPOINT_DS18B20_LABEL(3), ENDPOINT_DS18B20_DH)
-    sendEvent(name: 'existsDS18B203', value: "yes", displayed: false)
-}
+def createDS18B204() { createChildDevice("DS18B204") }
 
-def createDS18B204() {
-    createChildDevice(ENDPOINT_DS18B20_ID(4), ENDPOINT_DS18B20_LABEL(4), ENDPOINT_DS18B20_DH)
-    sendEvent(name: 'existsDS18B204', value: "yes", displayed: false)
-}
+def createDS18B205() { createChildDevice("DS18B205") }
 
-def createDS18B205() {
-    createChildDevice(ENDPOINT_DS18B20_ID(5), ENDPOINT_DS18B20_LABEL(5), ENDPOINT_DS18B20_DH)
-    sendEvent(name: 'existsDS18B205', value: "yes", displayed: false)
-}
+def createDS18B206() { createChildDevice("DS18B206") }
 
-def createDS18B206() {
-    createChildDevice(ENDPOINT_DS18B20_ID(6), ENDPOINT_DS18B20_LABEL(6), ENDPOINT_DS18B20_DH)
-    sendEvent(name: 'existsDS18B206', value: "yes", displayed: false)
-}
+def createDHT22() { createChildDevice("DHT22") }
 
-def createDHT22() {
-    createChildDevice(ENDPOINT_DHT22_ID(), ENDPOINT_DHT22_LABEL(), ENDPOINT_DHT22_DH)
-    sendEvent(name: 'existsDHT22', value: "yes", displayed: false)
-}
+def createChildDevice(String name) {
+    def tile = deviceTiles.find{it.name == name}
+    def childId = tile.id
+    def childLabel = tile.label
+    def dh = tile.dh
 
-def createChildDevice(String childId, String childLabel, String dh) {
     def label = "$device.displayName $childLabel"
     def dni = "${device.deviceNetworkId}-$childId"
 
@@ -614,6 +499,7 @@ def createChildDevice(String childId, String childLabel, String dh) {
 
     try {
         addChildDevice(dh, dni, device.hub.id, [completedSetup: true, label: "${label}", isComponent: false])
+        sendEvent(name: "exists$name", value: "yes", displayed: false)
 //        log.debug "Added $label"
     } catch (e) {
         log.warn "Failed to add $label - $e"
@@ -662,19 +548,9 @@ def findChildDevice(String deviceId) {
 }
 
 def verifyIfChildrenExist() {
-    sendEvent(name: 'existsButton1', value: findChildDevice(ENDPOINT_BUTTON_ID(1)) ? "yes" : "no", displayed: false)
-    sendEvent(name: 'existsButton2', value: findChildDevice(ENDPOINT_BUTTON_ID(2)) ? "yes" : "no", displayed: false)
-    sendEvent(name: 'existsContact1', value: findChildDevice(ENDPOINT_CONTACT_ID(1)) ? "yes" : "no", displayed: false)
-    sendEvent(name: 'existsContact2', value: findChildDevice(ENDPOINT_CONTACT_ID(2)) ? "yes" : "no", displayed: false)
-    sendEvent(name: 'existsSwitch1', value: findChildDevice(ENDPOINT_SWITCH_ID(1)) ? "yes" : "no", displayed: false)
-    sendEvent(name: 'existsSwitch2', value: findChildDevice(ENDPOINT_SWITCH_ID(2)) ? "yes" : "no", displayed: false)
-    sendEvent(name: 'existsDS18B201', value: findChildDevice(ENDPOINT_DS18B20_ID(1)) ? "yes" : "no", displayed: false)
-    sendEvent(name: 'existsDS18B202', value: findChildDevice(ENDPOINT_DS18B20_ID(2)) ? "yes" : "no", displayed: false)
-    sendEvent(name: 'existsDS18B203', value: findChildDevice(ENDPOINT_DS18B20_ID(3)) ? "yes" : "no", displayed: false)
-    sendEvent(name: 'existsDS18B204', value: findChildDevice(ENDPOINT_DS18B20_ID(4)) ? "yes" : "no", displayed: false)
-    sendEvent(name: 'existsDS18B205', value: findChildDevice(ENDPOINT_DS18B20_ID(5)) ? "yes" : "no", displayed: false)
-    sendEvent(name: 'existsDS18B206', value: findChildDevice(ENDPOINT_DS18B20_ID(6)) ? "yes" : "no", displayed: false)
-    sendEvent(name: 'existsDHT22', value: findChildDevice(ENDPOINT_DHT22_ID()) ? "yes" : "no", displayed: false)
+    deviceTiles.each {
+        sendEvent(name: "exists${it.name}", value: findChildDevice(it.id) ? "yes" : "no", displayed: false)
+    }
 }
 
 /**
