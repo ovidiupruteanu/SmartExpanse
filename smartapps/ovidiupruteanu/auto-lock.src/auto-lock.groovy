@@ -27,6 +27,7 @@ def installed() {
 }
 
 def updated() {
+    unschedule()
     unsubscribe()
     initialize()
 }
@@ -35,26 +36,38 @@ def initialize() {
     state.lockIsScheduled = false
     subscribe(doorSensor, "contact.open", doorOpened)
     subscribe(motionSensors, "motion.active", motionDetected)
+    subscribe(hallwayMotionSensor, "motion.active", hallwayMotionDetected)
 }
 
 def doorOpened(event) {
-    state.lockIsScheduled = false
-    unschedule(lock)
+    unscheduleLock()
 }
 
 def motionDetected(event) {
+    scheduleLock()
+}
+
+def hallwayMotionDetected() {
+    unscheduleLock()
+}
+
+def scheduleLock() {
     if (doorSensor.currentState("contact").value == "closed" && doorLock.currentState("lock").value != "locked" && !state.lockIsScheduled) {
         state.lockIsScheduled = true
         runIn(60*minutes, lock)
     }
 }
 
+def unscheduleLock() {
+    state.lockIsScheduled = false
+    unschedule(lock)
+}
+
 def lock() {
+    state.lockIsScheduled = false
     if (hallwayMotionSensor.currentState("motion").value == "active") {
-        log.debug "Hallway motion is active, retrying in 1 minute"
-        runIn(60, lock)
+        scheduleLock()
     } else {
-        state.lockIsScheduled = false
         if (doorSensor.currentState("contact").value == "closed") {
             doorLock.lock()
         }
