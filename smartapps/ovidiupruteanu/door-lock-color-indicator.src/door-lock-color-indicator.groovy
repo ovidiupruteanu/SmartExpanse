@@ -15,7 +15,7 @@ definition(
 preferences {
     section() {
         input "doorLock", "capability.lock", title: "Door Lock"
-        input "indicator", "capability.execute", title: "Color Indicator"
+        input "indicator", "capability.actuator", title: "Color Indicator"
     }
 }
 
@@ -34,9 +34,9 @@ def initialize() {
 }
 
 def doorLocked(event) {
-    indicator.execute("colorWhenOnOrOff", new groovy.json.JsonBuilder([color: "red"]).toString())
+    indicator.setIndicatorColor("red")
 }
 
 def doorUnlocked(event) {
-    indicator.execute("colorWhenOnOrOff", new groovy.json.JsonBuilder([color: "blue"]).toString())
+    indicator.setIndicatorColor("blue")
 }
