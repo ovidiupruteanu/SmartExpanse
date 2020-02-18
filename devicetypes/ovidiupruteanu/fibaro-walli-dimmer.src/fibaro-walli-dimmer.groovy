@@ -296,14 +296,14 @@ def on() {
     encapSequence([
             zwave.basicV1.basicSet(value: 0xFF),
             zwave.switchMultilevelV1.switchMultilevelGet(),
-    ], 100)
+    ], 5000)
 }
 
 def off() {
     encapSequence([
             zwave.basicV1.basicSet(value: 0x00),
             zwave.switchMultilevelV1.switchMultilevelGet(),
-    ], 100)
+    ], 5000)
 }
 
 def poll() {
