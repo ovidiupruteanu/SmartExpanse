@@ -25,11 +25,12 @@ def pageOne() {
         routines.sort()
 
         section("Devices") {
-            input "doorButton", "capability.button", title: "Button"
-            input "doorSensor", "capability.contactSensor", title: "Contact Sensor"
-            input "doorLock", "capability.lock", title: "Door Lock"
-            input "motionSensors", "capability.motionSensor", title: "Motion Sensors", multiple: true
-            input "goodbyeRoutine", "enum", title: "Goodbye Routine", options: routines
+            input "doorButton", "capability.button", title: "Button Device", required: true
+            input "buttonNumber", "number", title: "Button Number", required: true
+            input "doorSensor", "capability.contactSensor", title: "Contact Sensor", required: true
+            input "doorLock", "capability.lock", title: "Door Lock", required: true
+            input "motionSensors", "capability.motionSensor", title: "Motion Sensors", multiple: true, required: true
+            input "goodbyeRoutine", "enum", title: "Goodbye Routine", options: routines, required: true
             input "speaker", "capability.speechSynthesis", title: "Speaker"
         }
     }
@@ -55,19 +56,21 @@ def initialize() {
 }
 
 def doorButtonPushed(event) {
-//    log.debug "doorButtonPushed"
-    if (!state.standbyFlag) {
-//        log.debug "App on standby"
-        doorLock.unlock()
-        state.standbyFlag = true
-        runIn(60*2, timeout)
-    } else {
-        cancel();
+    if (event.jsonData?.buttonNumber == buttonNumber) {
+//        log.debug "doorButtonPushed"
+        if (!state.standbyFlag) {
+//            log.debug "App on standby"
+            doorLock.unlock()
+            state.standbyFlag = true
+            runIn(60*2, timeout)
+        } else {
+            cancel();
+        }
     }
 }
 
 def doorOpened(event) {
-//    log.debug "doorOpenedx"
+//    log.debug "doorOpened"
     if (state.goodbyeFlag) {
         cancel()
     }
