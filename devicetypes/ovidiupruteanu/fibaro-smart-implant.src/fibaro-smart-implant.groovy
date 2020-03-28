@@ -30,7 +30,8 @@ metadata {
         }
 
         // I got the fingerprint prod and model from the z-wavealliance product page https://products.z-wavealliance.org/products/3195
-        fingerprint mfr: "010F", prod: "0502", model: "1000"
+        // model is different for each region
+        fingerprint mfr: "010F", prod: "0502"
     }
 
     tiles(scale: 2) {
