@@ -17,7 +17,6 @@
 metadata {
     definition(name: "Fibaro Smart Implant Contact", namespace: "ovidiupruteanu", author: "Ovidiu Pruteanu") {
         capability "Contact Sensor"
-        capability "Health Check"
         capability "Sensor"
     }
 
