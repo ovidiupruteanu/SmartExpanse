@@ -305,6 +305,26 @@ private static getPreferenceOptions() {
                     name: "Input 2 - sensitivity",
                     description: "This parameter defines the inertia time of IN1 input in alarm modes. Adjust this parameter to prevent bouncing or signal disruptions. Parameter is relevant only if parameter 20 is set to 0 or 1 (alarm mode).\n\n1-100 (10ms-1000ms, 10ms step)"
             ],
+            152: [
+                    required: false,
+                    size: 2,
+                    type: "number",
+                    defaultValue: 0,
+                    defaultDescription: "0 (no delay)",
+                    range: "(0..3600)",
+                    name: "Input 1 - delay of alarm cancellation",
+                    description: "This parameter defines additional delay of cancelling the alarm on IN1 input. Parameter is relevant only if parameter 20 is set to 0 or 1 (alarm mode).\n\n0 (no delay), 1s-3600s"
+            ],
+            153: [
+                    required: false,
+                    size: 2,
+                    type: "number",
+                    defaultValue: 0,
+                    defaultDescription: "0 (no delay)",
+                    range: "(0..3600)",
+                    name: "Input 2 - delay of alarm cancellation",
+                    description: "This parameter defines additional delay of cancelling the alarm on IN2 input. Parameter is relevant only if parameter 21 is set to 0 or 1 (alarm mode).\n\n0 (no delay), 1s-3600s"
+            ],
 //            40: [
 //                    size: 1,
 //                    type: "enum",
