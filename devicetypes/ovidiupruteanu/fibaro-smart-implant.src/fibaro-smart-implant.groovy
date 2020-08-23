@@ -663,7 +663,7 @@ def contactRefresh(String childNetworkId) {
 def analogRefresh(String childNetworkId) {
     def deviceNum = childNetworkId.replaceAll("^${device.deviceNetworkId}-${ENDPOINT_ANALOG_ID("")}", "") as int
     def endpoint = ANALOG_1_ENDPOINT + deviceNum - 1
-    def commands = [multiEncap(zwave.sensorMultilevelV5.sensorMultilevelGet(sensorType: 0x0F), endpoint)] //todo: check sensor type
+    def commands = [multiEncap(zwave.sensorMultilevelV5.sensorMultilevelGet(sensorType: 0x0F), endpoint)]
     sendHubCommand(commands, 100)
 }
 /*
