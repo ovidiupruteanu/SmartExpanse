@@ -167,6 +167,8 @@ private static getDHT22_TEMPERATURE_ENDPOINT() {8}
 private static getDHT22_HUMIDITY_ENDPOINT() {9}
 private static getDS18B20_MIN_ENDPOINT() {8}
 private static getDS18B20_MAX_ENDPOINT() {13}
+private static getANALOG_1_ENDPOINT() {3}
+private static getANALOG_2_ENDPOINT() {4}
 
 private getIsDHT22Connected() { findChildDevice(ENDPOINT_DHT22_ID()) as boolean }
 private getIsDS18B20Connected() {
@@ -183,16 +185,19 @@ private static ENDPOINT_CONTACT_ID(num) {"contact-$num"}
 private static ENDPOINT_SWITCH_ID(num) {"switch-$num"}
 private static ENDPOINT_DS18B20_ID(num) {"ds18b20-$num"}
 private static ENDPOINT_DHT22_ID() {"dht22"}
+private static ENDPOINT_ANALOG_ID(num) {"analog-$num"}
 private static ENDPOINT_BUTTON_LABEL(num) {"Button $num"}
 private static ENDPOINT_CONTACT_LABEL(num) {"Alarm $num"}
 private static ENDPOINT_SWITCH_LABEL(num) {"Switch $num"}
 private static ENDPOINT_DS18B20_LABEL(num) {"DS18B20 $num"}
 private static ENDPOINT_DHT22_LABEL() {"DHT22"}
+private static ENDPOINT_ANALOG_LABEL(num) {"Analog $num"}
 private static ENDPOINT_BUTTON_DH() {"Fibaro Smart Implant Button"}
 private static ENDPOINT_CONTACT_DH() {"Fibaro Smart Implant Contact"}
 private static ENDPOINT_SWITCH_DH() {"Fibaro Smart Implant Switch"}
 private static ENDPOINT_DHT22_DH() {"Fibaro Smart Implant DHT22"}
 private static ENDPOINT_DS18B20_DH() {"Fibaro Smart Implant DS18B20"}
+private static ENDPOINT_ANALOG_DH() {"Fibaro Smart Implant Analog"}
 
 private static def getCommandClassVersions() {
     [
@@ -232,12 +237,12 @@ private static getPreferenceOptions() {
                     defaultValue: 2,
                     defaultDescription: "Monostable button",
                     options: [
-                            0: "Normally closed alarm input",
-                            1: "Normally open alarm input",
-                            2: "Monostable button",
-                            3: "Bistable button",
-                            4: "Analog input without internal pull-up",
-                            5: "Analog input with internal pullup",
+                            0: "0: Normally closed alarm input",
+                            1: "1: Normally open alarm input",
+                            2: "2: Monostable button",
+                            3: "3: Bistable button",
+                            4: "4: 3-wire analog sensor",
+                            5: "5: 2-wire analog sensor",
                     ],
                     name: "Input 1 - operating mode",
                     description: "This parameter allows to choose mode of 1st input (IN1). Change it depending on connected device."
@@ -249,12 +254,12 @@ private static getPreferenceOptions() {
                     defaultValue: 2,
                     defaultDescription: "Monostable button",
                     options: [
-                            0: "Normally closed alarm input",
-                            1: "Normally open alarm input",
-                            2: "Monostable button",
-                            3: "Bistable button",
-                            4: "Analog input without internal pull-up",
-                            5: "Analog input with internal pullup",
+                            0: "0: Normally closed alarm input",
+                            1: "1: Normally open alarm input",
+                            2: "2: Monostable button",
+                            3: "3: Bistable button",
+                            4: "4: 3-wire analog sensor",
+                            5: "5: 2-wire analog sensor",
                     ],
                     name: "Input 2 - operating mode",
                     description: "This parameter allows to choose mode of 2nd input (IN2). Change it depending on connected device."
@@ -403,6 +408,26 @@ private static getPreferenceOptions() {
                     name: "Output 2 - auto off",
                     description: "This parameter defines time after which OUT2 will be automatically deactivated.\n\n0 – auto off disabled\n1-27000 (0.1s-45min, 0.1s step)"
             ],
+            63: [
+                    required: false,
+                    size: 1,
+                    type: "number",
+                    defaultValue: 5,
+                    defaultDescription: "5 (0.5V)",
+                    range: "(0..100)",
+                    name: "Analog inputs - minimal change to report",
+                    description: "This parameter defines minimal change (from the last reported) of analog input value that results in sending new report. Parameter is relevant only for analog inputs (parameter 20 or 21 set to 4 or 5). Setting too high value may result in no reports being sent.\n\n0 - reporting on change disabled\n1-100 (0.1-10V, 0.1V step)"
+            ],
+            64: [
+                    required: false,
+                    size: 2,
+                    type: "number",
+                    defaultValue: 0,
+                    defaultDescription: "0 (periodical reports disabled)",
+                    range: "(0..32400)",
+                    name: "Analog inputs - periodical reports",
+                    description: "This parameter defines reporting period of analog inputs value. Periodical reports are independent from changes in value (parameter 63). Parameter is relevant only for analog inputs (parameter 20 or 21 set to 4 or 5).\n\n0 – periodical reports disabled\n60-32400 (60s-9h)"
+            ],
             65: [
                     required: false,
                     size: 2,
@@ -463,6 +488,8 @@ private static getDeviceTiles() {
             [name: "DS18B205", label: ENDPOINT_DS18B20_LABEL(5), icon: "st.Weather.weather2", id: ENDPOINT_DS18B20_ID(5), dh: ENDPOINT_DS18B20_DH()],
             [name: "DS18B206", label: ENDPOINT_DS18B20_LABEL(6), icon: "st.Weather.weather2", id: ENDPOINT_DS18B20_ID(6), dh: ENDPOINT_DS18B20_DH()],
             [name: "DHT22", label: ENDPOINT_DHT22_LABEL(), icon: "st.Weather.weather12", id: ENDPOINT_DHT22_ID(), dh: ENDPOINT_DHT22_DH()],
+            [name: "Analog1", label: ENDPOINT_ANALOG_LABEL(1), icon: "st.Electronics.electronics6", id: ENDPOINT_ANALOG_ID(1), dh: ENDPOINT_ANALOG_DH()],
+            [name: "Analog2", label: ENDPOINT_ANALOG_LABEL(2), icon: "st.Electronics.electronics6", id: ENDPOINT_ANALOG_ID(2), dh: ENDPOINT_ANALOG_DH()],
     ]
 }
 
@@ -503,6 +530,10 @@ def createDS18B205() { createChildDevice("DS18B205") }
 def createDS18B206() { createChildDevice("DS18B206") }
 
 def createDHT22() { createChildDevice("DHT22") }
+
+def createAnalog1() { createChildDevice("Analog1") }
+
+def createAnalog2() { createChildDevice("Analog2") }
 
 def createChildDevice(String name) {
     def tile = deviceTiles.find{it.name == name}
@@ -628,6 +659,13 @@ def contactRefresh(String childNetworkId) {
     ]
     sendHubCommand(commands, 100)
 }
+
+def analogRefresh(String childNetworkId) {
+    def deviceNum = childNetworkId.replaceAll("^${device.deviceNetworkId}-${ENDPOINT_ANALOG_ID("")}", "") as int
+    def endpoint = ANALOG_1_ENDPOINT + deviceNum - 1
+    def commands = [multiEncap(zwave.sensorMultilevelV5.sensorMultilevelGet(sensorType: 0x0F), endpoint)] //todo: check sensor type
+    sendHubCommand(commands, 100)
+}
 /*
  * Z-Wave Events
  */
@@ -687,6 +725,10 @@ def zwaveEvent(physicalgraph.zwave.commands.multichannelv3.MultiChannelCmdEncap 
         findChildDevice(ENDPOINT_CONTACT_ID(1))?.zwaveEvent(encapsulatedCommand)
     } else if (cmd.sourceEndPoint == ALARM_2_ENDPOINT) {
         findChildDevice(ENDPOINT_CONTACT_ID(2))?.zwaveEvent(encapsulatedCommand)
+    } else if (cmd.sourceEndPoint == ANALOG_1_ENDPOINT) {
+        findChildDevice(ENDPOINT_ANALOG_ID(1))?.zwaveEvent(encapsulatedCommand)
+    } else if (cmd.sourceEndPoint == ANALOG_2_ENDPOINT) {
+        findChildDevice(ENDPOINT_ANALOG_ID(2))?.zwaveEvent(encapsulatedCommand)
     } else {
 //        log.debug "Unhandled Multi Channel Endpoint: ${cmd.sourceEndPoint}"
 //        log.debug "Unhandled Encapsulated CMD: ${encapsulatedCommand}"
