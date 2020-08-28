@@ -18,11 +18,11 @@ preferences {
 def pageOne() {
     dynamicPage(name: "pageOne", title: "Page One", install: true, uninstall: true) {
 
-        // get the available routines
-        def routines = location.helloHome?.getPhrases()*.label
-
-        // sort them alphabetically
-        routines.sort()
+//        // get the available routines
+//        def routines = location.helloHome?.getPhrases()*.label
+//
+//        // sort them alphabetically
+//        routines.sort()
 
         section("Devices") {
             input "doorButton", "capability.button", title: "Button Device", required: true
@@ -30,7 +30,8 @@ def pageOne() {
             input "doorSensor", "capability.contactSensor", title: "Contact Sensor", required: true
             input "doorLock", "capability.lock", title: "Door Lock", required: true
             input "motionSensors", "capability.motionSensor", title: "Motion Sensors", multiple: true, required: true
-            input "goodbyeRoutine", "enum", title: "Goodbye Routine", options: routines, required: true
+//            input "goodbyeRoutine", "enum", title: "Goodbye Routine", options: routines, required: true
+            input "goodbyeSwitch", "capability.switch", title: "Goodbye Switch", required: true
             input "speaker", "capability.speechSynthesis", title: "Speaker"
         }
     }
@@ -98,7 +99,8 @@ def isMotionActive() {
 }
 
 def runGoodbye() {
-    location.helloHome?.execute(settings.goodbyeRoutine)
+//    location.helloHome?.execute(settings.goodbyeRoutine)
+    goodbyeSwitch.on()
 }
 
 def lock() {
