@@ -31,7 +31,7 @@ metadata {
         command "reset"
         command "setIndicatorColor"
 
-        fingerprint mfr: "010F", prod: "1C01", model: "1000"
+        fingerprint mfr: "010F", prod: "1C01"
     }
 
     simulator {
