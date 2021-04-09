@@ -33,8 +33,10 @@ metadata {
             tileAttribute("device.buttonStatus", key: "PRIMARY_CONTROL") {
                 attributeState("default", label: 'Released', action: "momentary.push", backgroundColor: "#ffffff", icon: "st.unknown.zwave.remote-controller")
                 attributeState("held", label: 'Held', backgroundColor: "#00a0dc", icon: "st.unknown.zwave.remote-controller")
+                attributeState("held-down", label: 'Held', backgroundColor: "#00a0dc", icon: "st.unknown.zwave.remote-controller")
                 attributeState("single-clicked", label: 'Single-clicked', backgroundColor: "#00a0dc", icon: "st.unknown.zwave.remote-controller")
                 attributeState("double-clicked", label: 'Double-clicked', backgroundColor: "#00a0dc", icon: "st.unknown.zwave.remote-controller")
+                attributeState("triple-clicked", label: 'Triple-clicked', backgroundColor: "#00a0dc", icon: "st.unknown.zwave.remote-controller")
                 attributeState("released", label: 'Released', action: "momentary.push", backgroundColor: "#ffffff", icon: "st.unknown.zwave.remote-controller")
             }
             tileAttribute("device.lastPressed", key: "SECONDARY_CONTROL") {
@@ -50,8 +52,10 @@ metadata {
 private static getButtonValueMap() {
     [
             0: [value: "pushed", message: "single-clicked"],
-            2: [value: "held", message: "held"],
-            3: [value: "double", message: "double-clicked"]
+            1: [value: "held", message: "held"],
+            2: [value: "down_hold", message: "held-down"],
+            3: [value: "double", message: "double-clicked"],
+            4: [value: "pushed_3x", message: "triple-clicked"],
     ]
 }
 
