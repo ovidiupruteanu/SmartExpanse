@@ -7,6 +7,13 @@ Install all 7 DTHs manually or using the GitHub integration.
 > Name: SmartExpanse  
 > Branch: master
 
+[Fibaro Smart Implant Analog Sensor](/devicetypes/ovidiupruteanu/fibaro-smart-implant-analog.src)  
+[Fibaro Smart Implant Button](/devicetypes/ovidiupruteanu/fibaro-smart-implant-button.src)  
+[Fibaro Smart Implant Contact Sensor](/devicetypes/ovidiupruteanu/fibaro-smart-implant-contact.src)  
+[Fibaro Smart Implant DHT22 Temperature and Humidity Sensor](/devicetypes/ovidiupruteanu/fibaro-smart-implant-dht22.src)  
+[Fibaro Smart Implant DS18B20 Temperature Sensor](/devicetypes/ovidiupruteanu/fibaro-smart-implant-ds18b20.src)  
+[Fibaro Smart Implant Switch](/devicetypes/ovidiupruteanu/fibaro-smart-implant-switch.src)  
+
 ### Configuration
 #### Adding a sensor device
 Add sensor devices from the main device's settings page.
