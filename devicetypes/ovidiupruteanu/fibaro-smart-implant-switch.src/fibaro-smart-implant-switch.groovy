@@ -69,10 +69,12 @@ def zwaveEvent(physicalgraph.zwave.Command cmd) {
 }
 
 def on() {
+    log.debug("Implant Switch ON '$device.deviceNetworkId'")
     parent.switchToggle(device.deviceNetworkId, true)
 }
 
 def off() {
+    log.debug("Implant Switch OFF '$device.deviceNetworkId'")
     parent.switchToggle(device.deviceNetworkId, false)
 }
 

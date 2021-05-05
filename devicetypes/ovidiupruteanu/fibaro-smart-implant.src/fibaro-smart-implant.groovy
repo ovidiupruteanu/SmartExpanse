@@ -607,6 +607,7 @@ def refresh() {
 }
 
 def switchToggle(String childNetworkId, Boolean onOrOff) {
+    log.debug("Implant Switch Toggle, ID: '$childNetworkId', State: '$onOrOff'")
     def deviceNum = childNetworkId.replaceAll("^${device.deviceNetworkId}-${ENDPOINT_SWITCH_ID("")}", "") as int
     def endpoint = OUTPUT_1_ENDPOINT + deviceNum - 1
     def logicOfOperation = settingsParam(deviceNum == 1 ? 154 : 155)
@@ -615,6 +616,7 @@ def switchToggle(String childNetworkId, Boolean onOrOff) {
 
     def commands = [multiEncap(zwave.switchBinaryV1.switchBinarySet(switchValue: switchValue), endpoint),
                     multiEncap(zwave.switchBinaryV1.switchBinaryGet(), endpoint)]
+    log.debug("Implant Switch Commands: $commands")
     sendHubCommand(commands, 100)
 }
 
