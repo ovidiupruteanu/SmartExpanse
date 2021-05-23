@@ -7,6 +7,7 @@ Install all 7 DTHs manually or using the GitHub integration.
 > Name: SmartExpanse  
 > Branch: master
 
+[Fibaro Smart Implant](/devicetypes/ovidiupruteanu/fibaro-smart-implant.src)  
 [Fibaro Smart Implant Analog Sensor](/devicetypes/ovidiupruteanu/fibaro-smart-implant-analog.src)  
 [Fibaro Smart Implant Button](/devicetypes/ovidiupruteanu/fibaro-smart-implant-button.src)  
 [Fibaro Smart Implant Contact Sensor](/devicetypes/ovidiupruteanu/fibaro-smart-implant-contact.src)  
