@@ -21,6 +21,7 @@ metadata {
         capability "Sensor"
         capability "Voltage Measurement"
         capability "Battery"
+        capability "pH Measurement"
     }
 
     simulator {
@@ -73,8 +74,10 @@ def zwaveEvent(physicalgraph.zwave.commands.sensormultilevelv5.SensorMultilevelR
     def maxV = settings.maxVoltage ? settings.maxVoltage : 10.0
     def cappedValue = Math.min(Math.max(cmd.scaledSensorValue, minV), maxV)
     def percentage = Math.round((cappedValue - minV) * 100 / (maxV - minV))
+    def ph = Math.round((cappedValue - minV) * 14 / (maxV - minV) * 10) / 10
 
     sendEvent(name: "battery", value: percentage)
+    sendEvent(name: "pH", value: ph)
 }
 
 def zwaveEvent(physicalgraph.zwave.Command cmd) {
