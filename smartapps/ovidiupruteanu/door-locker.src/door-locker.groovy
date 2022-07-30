@@ -32,7 +32,7 @@ def pageOne() {
             input "motionSensors", "capability.motionSensor", title: "Motion Sensors", multiple: true, required: true
 //            input "goodbyeRoutine", "enum", title: "Goodbye Routine", options: routines, required: true
             input "goodbyeSwitch", "capability.switch", title: "Goodbye Switch", required: true
-            input "speaker", "capability.speechSynthesis", title: "Speaker"
+//            input "speaker", "capability.speechSynthesis", title: "Speaker"
         }
     }
 }
@@ -129,5 +129,5 @@ def cancel() {
     state.goodbyeFlag = false
     unschedule(lock)
     unschedule(timeout)
-    speaker.speak("Door locking cancelled")
+//    speaker.speak("Door locking cancelled")
 }
